@@ -9,7 +9,7 @@
 script = ExtResource( 1 )
 
 [node name="SpawnTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 3.0
 autostart = true
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -23,6 +23,6 @@ position = Vector2( 1050, 300 )
 position = Vector2( 500, 650 )
 
 [node name="Josiel" parent="." instance=ExtResource( 5 )]
-position = Vector2( 388, 178 )
+position = Vector2( 398, 188 )
 
-[connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
+[connection signal="timeout" from="SpawnTimer" to="." method="OnSpawnTimerTimeout"]
