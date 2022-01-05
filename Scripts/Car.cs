@@ -24,6 +24,10 @@ public class Car : KinematicBody2D
         velocity.x = x;
         velocity.y = y;
     }
+
+    public Vector2 get_velocity(){
+        return velocity;
+    }
     public void Stop(){
         in_movement = false;
     }

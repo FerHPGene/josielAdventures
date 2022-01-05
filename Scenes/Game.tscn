@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scripts/Game.cs" type="Script" id=1]
 [ext_resource path="res://Assets/hollow_knight3_LI.jpg" type="Texture" id=2]
 [ext_resource path="res://Scenes/Spawn.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/Car.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Josiel.tscn" type="PackedScene" id=5]
 
 [node name="Game" type="Node2D"]
@@ -25,8 +24,5 @@ position = Vector2( 500, 650 )
 
 [node name="Josiel" parent="." instance=ExtResource( 5 )]
 position = Vector2( 388, 178 )
-
-[node name="KinematicBody2D" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1013, 489 )
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
