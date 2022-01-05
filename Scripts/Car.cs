@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using static Context;
 
 public class Car : KinematicBody2D
 {
@@ -19,6 +20,7 @@ public class Car : KinematicBody2D
 			if(InMovement){
 				MoveAndSlide(Velocity);
 			}
+
 	}
 
     public void SetVelocity(Vector2 velocity){
@@ -42,23 +44,23 @@ public class Car : KinematicBody2D
 		}
 
     public void Stop(){
-        InMovement = false;
+    		InMovement = false;
     }
 
 		public void Start(){
-			InMovement = true;
+				InMovement = true;
 		}
 
 		private Vector2 GenerateRandomVelocity(){
         Vector2 velocity;
 
         if(String.Equals(SpawnSelect, "right")){
-            velocity.x = - (GD.Randf()*30 + 100);
+            velocity.x = - (GD.Randf()*15 + Context.GetSpeed());
             velocity.y = 0;
         }
         else{
             velocity.x = 0;
-            velocity.y = - (GD.Randf()*30 + 100);
+            velocity.y = - (GD.Randf()*15 + Context.GetSpeed());
         }
 
         return velocity;

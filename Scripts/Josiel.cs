@@ -4,9 +4,9 @@ using static Game;
 
 public class Josiel : KinematicBody2D
 {
-	bool looking_right = false;
-	public bool rstop = false;
-	public bool dstop = false;
+	public bool LookingRight = false;
+	public bool RStop = false;
+	public bool DStop = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -17,17 +17,17 @@ public class Josiel : KinematicBody2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
-		if(looking_right){
-			right_proccess_movement(delta);
+		if(LookingRight){
+			right_process_movement(delta);
 		}
 		else{
-			down_proccess_movement(delta);
+			down_process_movement(delta);
 		}
 	}
 
-	private void right_proccess_movement(float delta){
+	private void right_process_movement(float delta){
 		if(Input.IsActionPressed("down")){
-			looking_right = false;
+			LookingRight = false;
 			GD.Print("Pra baixo!");
 
 			//TROCAR A SPRITE
@@ -35,22 +35,22 @@ public class Josiel : KinematicBody2D
 		}
 
 		if(Input.IsActionJustPressed("space")){
-			if(rstop){
-				rstop = false;
+			if(RStop){
+				RStop = false;
 				//LIGAR OS CARROS
 				GD.Print("Liga!");
 			}
 			else{
-				rstop = true;
+				RStop = true;
 				//PARAR OS CARROS
 				GD.Print("Pare!");
 			}
 		}
 	}
 
-	private void down_proccess_movement(float delta){
+	private void down_process_movement(float delta){
 		if(Input.IsActionPressed("right")){
-			looking_right = true;
+			LookingRight = true;
 			GD.Print("Pra direita!");
 
 			//TROCAR A SPRITE
@@ -58,13 +58,13 @@ public class Josiel : KinematicBody2D
 		}
 
 		if(Input.IsActionJustPressed("space")){
-			if(dstop){
-				dstop = false;
+			if(DStop){
+				DStop = false;
 				//LIGAR OS CARROS
 				GD.Print("Liga!");
 			}
 			else{
-				dstop = true;
+				DStop = true;
 				//PARAR OS CARROS
 				GD.Print("Pare!");
 			}
