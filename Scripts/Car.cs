@@ -15,17 +15,13 @@ public class Car : KinematicBody2D
     if (this.SpawnSelect == "down")
     {
       this.Position = Context.SpawnDPos;
+      GetNode<Sprite>("Sprite").Rotate(-(float)Math.PI / 2);
     }
     else
     {
       this.Position = Context.SpawnRPos;
     }
-
     this.SetVelocity();
-    
-    if(Velocity.x == 0){
-      GetNode<Sprite>("Sprite").Rotate(-(float) Math.PI/2);
-    }
   }
 
 

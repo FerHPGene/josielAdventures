@@ -10,9 +10,18 @@ config_version=4
 
 [application]
 
-config/name="Jogo - Trabalho - C#"
+config/name="JosielAdventures"
 run/main_scene="res://Scenes/Game.tscn"
-config/icon="res://icon.png"
+config/icon="res://Assets/icon.png"
+
+[display]
+
+window/size/resizable=false
+
+[global]
+
+display=false
+resize=false
 
 [input]
 
