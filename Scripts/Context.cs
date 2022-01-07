@@ -140,7 +140,6 @@ public class Context : Godot.Object
 
         if (car.Position.x < -100)
         {
-
           car.QueueFree();
           RCars.Remove(car);
           CarsSafelyCrossedMutex.Lock();
