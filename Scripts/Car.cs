@@ -22,6 +22,10 @@ public class Car : KinematicBody2D
     }
 
     this.SetVelocity();
+    
+    if(Velocity.x == 0){
+      GetNode<Sprite>("Sprite").Rotate(-(float) Math.PI/2);
+    }
   }
 
 

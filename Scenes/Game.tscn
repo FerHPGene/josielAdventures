@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scripts/Game.cs" type="Script" id=1]
-[ext_resource path="res://Assets/hollow_knight3_LI.jpg" type="Texture" id=2]
+[ext_resource path="res://Assets/Background.jpg" type="Texture" id=2]
 [ext_resource path="res://Scenes/Spawn.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scripts/ScoreLabel.cs" type="Script" id=4]
 [ext_resource path="res://Scenes/Josiel.tscn" type="PackedScene" id=5]
@@ -19,7 +19,8 @@ script = ExtResource( 1 )
 wait_time = 2.3
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 540, 309 )
+position = Vector2( 500, 300 )
+scale = Vector2( 0.930555, 0.930555 )
 texture = ExtResource( 2 )
 
 [node name="SpawnR" parent="." instance=ExtResource( 3 )]
@@ -29,7 +30,7 @@ position = Vector2( 1050, 300 )
 position = Vector2( 500, 650 )
 
 [node name="Josiel" parent="." instance=ExtResource( 5 )]
-position = Vector2( 398, 188 )
+position = Vector2( 405, 190 )
 
 [node name="ScoreLabel" type="Label" parent="."]
 margin_left = 953.0

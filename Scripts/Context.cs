@@ -7,7 +7,7 @@ using static Car;
 public class Context : Godot.Object
 {
 
-  public const int DEFAULT_REMAING_TIME = 15;
+  public const int DEFAULT_REMAING_TIME = 7;
   static public Context Instance = new Context();
 
   static private bool GameRunning = false;

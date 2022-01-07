@@ -1,14 +1,14 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Assets/Car_Assets/Francesco.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Car_Assets/Gilbs 6 Car Set/BlueStrip.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Car.cs" type="Script" id=2]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 40.0
-height = 64.0
+radius = 41.9999
+height = 72.0002
 
 [node name="KinematicBody2D" type="KinematicBody2D"]
-scale = Vector2( -1, 1 )
+scale = Vector2( -0.8, 0.8 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true
@@ -19,5 +19,5 @@ rotation = 1.5708
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 0.3, 0.3 )
+scale = Vector2( 2.47187, 2.47187 )
 texture = ExtResource( 1 )

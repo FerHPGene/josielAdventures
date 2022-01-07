@@ -2,7 +2,6 @@ using Godot;
 using System;
 using static Context;
 
-// assets do pato: https://deadmadman.itch.io/the-quaken-assets
 public class Game : Node2D
 {
 
