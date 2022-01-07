@@ -15,13 +15,28 @@ public class Josiel : KinematicBody2D
   // Called every frame. 'delta' is the elapsed time since the previous frame.
   public override void _Process(float delta)
   {
-    if (LookingRight)
+    if (Context.IsGameRunning())
     {
-      ProcessRightMovement();
+      if (LookingRight)
+      {
+        ProcessRightMovement();
+      }
+      else
+      {
+        ProcessDownMovement();
+      }
     }
     else
     {
-      ProcessDownMovement();
+      ProcessGameStopped();
+    }
+  }
+
+  private void ProcessGameStopped()
+  {
+    if (Input.IsActionJustPressed("enter"))
+    {
+      Context.StartGame();
     }
   }
 

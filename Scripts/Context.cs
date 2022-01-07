@@ -6,12 +6,21 @@ using static Car;
 
 public class Context : Godot.Object
 {
+
+  public const int DEFAULT_REMAING_TIME = 15;
   static public Context Instance = new Context();
 
-  static private bool GameRunning;
+  static private bool GameRunning = false;
+
+  static public String DeathReason = "";
+
+  static private bool isFreshStart = true;
   static public int SpawnCount;
   static public bool RMoving;
   static public bool DMoving;
+
+  static public int RRemainingTime;
+  static public int DRemainingTime;
 
   static public Vector2 SpawnRPos;
   static public Vector2 SpawnDPos;
@@ -19,18 +28,21 @@ public class Context : Godot.Object
   static private List<Car> RCars = new List<Car>();
   static private List<Car> DCars = new List<Car>();
 
-  static private Thread CarCleanerR;
-  static private Thread CarCleanerD;
-  static private Semaphore CarCleanerSemaphoreR = new Semaphore();
-  static private Semaphore CarCleanerSemaphoreD = new Semaphore();
+  static private Thread CarCleanerR = new Thread();
+  static private Thread CarCleanerD = new Thread();
+  static private Semaphore CarCleanerSemaphoreR;
+  static private Semaphore CarCleanerSemaphoreD;
 
   static private Mutex CarsSafelyCrossedMutex = new Mutex();
-  static private int CarsSafelyCrossed = 0;
+  static private int CarsSafelyCrossed;
+
+  static public Timer SpawnTimer;
+  static public Timer TimeLimitTimer;
 
   static public float GetSpeed()
   {
-    float speed = InitialSpeed + ((SpawnCount / 3.0f) * 1);
-    return speed;
+    float speed = InitialSpeed + ((SpawnCount / 3.0f) * 2.5f);
+    return speed > 250 ? 250 : speed;
   }
 
   static public void AddCar(Car car)
@@ -53,11 +65,25 @@ public class Context : Godot.Object
     }
   }
 
+  static private void RemoveAllCars()
+  {
+    foreach (Car car in RCars)
+    {
+      car.QueueFree();
+    }
+    RCars.Clear();
+    foreach (Car car in DCars)
+    {
+      car.QueueFree();
+    }
+    DCars.Clear();
+  }
+
   private void _startCarCleaner()
   {
-    CarCleanerR = new Thread();
+    CarCleanerSemaphoreR = new Semaphore();
+    CarCleanerSemaphoreD = new Semaphore();
     CarCleanerR.Start(this, nameof(ClearRightCars));
-    CarCleanerD = new Thread();
     CarCleanerD.Start(this, nameof(ClearDownCars));
   }
 
@@ -68,10 +94,26 @@ public class Context : Godot.Object
 
   static public void StopCarCleaner()
   {
-    CarCleanerSemaphoreD.Post();
-    CarCleanerSemaphoreR.Post();
-    CarCleanerR.WaitToFinish();
-    CarCleanerD.WaitToFinish();
+
+
+    if (CarCleanerSemaphoreD != null)
+    {
+      CarCleanerSemaphoreD.Post();
+    }
+
+    if (CarCleanerSemaphoreR != null)
+    {
+      CarCleanerSemaphoreR.Post();
+    }
+
+    if (CarCleanerR.IsActive())
+    {
+      CarCleanerR.WaitToFinish();
+    }
+    if (CarCleanerD.IsActive())
+    {
+      CarCleanerD.WaitToFinish();
+    }
   }
 
   static private void ClearRightCars()
@@ -83,6 +125,11 @@ public class Context : Godot.Object
       {
         GD.Print("Waiting R");
         CarCleanerSemaphoreR.Wait();
+        if (!GameRunning)
+        {
+          GD.Print("GAME WAS NOT RUNNING");
+          return;
+        }
         GD.Print("Woken up R");
       }
 
@@ -112,6 +159,11 @@ public class Context : Godot.Object
       {
         GD.Print("Waiting D");
         CarCleanerSemaphoreD.Wait();
+        if (!GameRunning)
+        {
+          GD.Print("GAME WAS NOT RUNNING");
+          return;
+        }
         GD.Print("Woken up D");
       }
 
@@ -142,12 +194,43 @@ public class Context : Godot.Object
 
   static public void StartGame()
   {
+    Context.isFreshStart = false;
+    Context.SpawnCount = 0;
+    Context.CarsSafelyCrossed = 0;
+    Context.RRemainingTime = Context.DEFAULT_REMAING_TIME;
+    Context.DRemainingTime = Context.DEFAULT_REMAING_TIME;
+    Context.DMoving = true;
+    Context.RMoving = true;
     GameRunning = true;
+    SpawnTimer.Start();
+    TimeLimitTimer.Start();
+    Context.StartCarCleaner();
   }
 
-  static public void EndGame()
+  static public void EndGame(String deathReason, bool isGameClosed = false)
   {
+    Context.DeathReason = deathReason;
     GameRunning = false;
+    GD.Print("Game Over");
+    SpawnTimer.Stop();
+    TimeLimitTimer.Stop();
+    Context.StopCarCleaner();
+    if (!isGameClosed)
+    {
+      System.Threading.Thread.Sleep(500);
+    }
+    Context.RemoveAllCars();
   }
+
+  static public bool IsGameRunning()
+  {
+    return GameRunning;
+  }
+
+  static public bool IsFreshStart()
+  {
+    return isFreshStart;
+  }
+
 }
 

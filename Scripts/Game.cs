@@ -9,18 +9,16 @@ public class Game : Node2D
   private PackedScene CarScene = (PackedScene)ResourceLoader.Load("res://Scenes/Car.tscn");
   public override void _ExitTree()
   {
-	GameOver();
-	Context.EndGame();
-	Context.StopCarCleaner();
+    Context.EndGame("Exit", isGameClosed: true);
   }
 
   // Called when the node enters the scene tree for the first time.
   public override void _Ready()
   {
-	GD.Print("RODANDO!!!!!!!!!!!!!!\n");
-	Context.StartGame();
-	Context.StartCarCleaner();
-	NewGame();
+    GD.Randomize();
+    Context.TimeLimitTimer = GetNode<Timer>("TimeLimitTimer");
+    Context.SpawnTimer = GetNode<Timer>("SpawnTimer");
+    GD.Print("Game Initiated");
   }
 
   // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,51 +28,72 @@ public class Game : Node2D
 
   public void OnSpawnTimerTimeout()
   {
-	Context.SpawnCount++;
-	GD.Print("SpawnCount: " + Context.SpawnCount);
+    Context.SpawnCount++;
+    GD.Print("SpawnCount: " + Context.SpawnCount);
 
-	uint RandomNumber = GD.Randi();
+    uint RandomNumber = GD.Randi();
 
-	GD.Print("RandomNumber: " + RandomNumber);
+    GD.Print("RandomNumber: " + RandomNumber);
 
-	String SpawnPos = "none";
+    String SpawnPos = "none";
 
-	if (RandomNumber % 2 == 0 && Context.DMoving)
-	{
-	  SpawnPos = "down";
-	}
-	else if (Context.RMoving)
-	{
-	  SpawnPos = "right";
-	}
-	else if (Context.DMoving)
-	{
-	  SpawnPos = "down";
-	}
+    if (RandomNumber % 2 == 0 && Context.DMoving)
+    {
+      SpawnPos = "down";
+    }
+
+    if (RandomNumber % 2 != 0 && Context.RMoving)
+    {
+      SpawnPos = "right";
+    }
 
 
-	GD.Print("Spawn pos: ", SpawnPos);
+    GD.Print("Spawn pos: ", SpawnPos);
 
-	if (SpawnPos != "none")
-	{
-	  Car car = (Car)CarScene.Instance();
-	  car.SetSpawnSelect(SpawnPos);
-	  Context.AddCar(car);
-	  AddChild(car);
-	}
+    if (SpawnPos != "none")
+    {
+      Car car = (Car)CarScene.Instance();
+      car.SetSpawnSelect(SpawnPos);
+      Context.AddCar(car);
+      AddChild(car);
+    }
   }
 
-  public void GameOver()
+  public void OnTimeLimitTimerTimeout()
   {
-	GetNode<Timer>("SpawnTimer").Stop();
-  }
+    if (Context.DMoving)
+    {
+      if (Context.DRemainingTime != Context.DEFAULT_REMAING_TIME)
+      {
+        Context.DRemainingTime++;
+      }
+    }
+    else
+    {
+      if (Context.DRemainingTime > 0)
+      {
+        Context.DRemainingTime--;
+      }
+    }
 
-  public void NewGame()
-  {
-	Context.SpawnCount = 0;
-	Context.DMoving = true;
-	Context.RMoving = true;
+    if (Context.RMoving)
+    {
+      if (Context.RRemainingTime != Context.DEFAULT_REMAING_TIME)
+      {
+        Context.RRemainingTime++;
+      }
+    }
+    else
+    {
+      if (Context.RRemainingTime > 0)
+      {
+        Context.RRemainingTime--;
+      }
+    }
 
-	GetNode<Timer>("SpawnTimer").Start();
+    if (Context.RRemainingTime == 0 || Context.DRemainingTime == 0)
+    {
+      Context.EndGame("Starvation");
+    }
   }
 }
